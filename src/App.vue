@@ -1,19 +1,55 @@
 <template>
-  <div id="app">
+  <div>
     <TheHeader />
     <main class="main-container">
       <div class="sidebar">
-        <div class="actions">
-          <button class="generate-button" @click="generateTeamHandler">チームを生成する</button>
-          <button class="reset-button" @click="resetConditions">条件をリセット</button>
-        </div>
         <h2>条件設定</h2>
         <div class="min-skill-count-setting">
           <label for="minSkillCount">最低発動スキル数:</label>
           <input type="number" id="minSkillCount" v-model.number="minSkillCount" min="1" max="10">
         </div>
-        <UnitSelector :selection="selectedUnits" @update:selection="updateUnitsSelection" />
-        <SkillSelector :selection="selectedSkills" @update:selection="updateSkillsSelection" />
+
+        <div class="selected-items-display" v-if="includedUnits.length > 0 || excludedUnits.length > 0 || includedSkills.length > 0 || excludedSkills.length > 0">
+          <div v-if="includedUnits.length > 0">
+            <h4>含めるユニット:</h4>
+            <div class="item-tags">
+              <span v-for="unitName in includedUnits" :key="unitName" class="item-tag include">{{ unitName }}</span>
+            </div>
+          </div>
+          <div v-if="excludedUnits.length > 0">
+            <h4>含めないユニット:</h4>
+            <div class="item-tags">
+              <span v-for="unitName in excludedUnits" :key="unitName" class="item-tag exclude">{{ unitName }}</span>
+            </div>
+          </div>
+          <div v-if="includedSkills.length > 0">
+            <h4>含めるスキル:</h4>
+            <div class="item-tags">
+              <span v-for="skillName in includedSkills" :key="skillName" class="item-tag include">{{ translateSkillName(skillName) }}</span>
+            </div>
+          </div>
+          <div v-if="excludedSkills.length > 0">
+            <h4>含めないスキル:</h4>
+            <div class="item-tags">
+              <span v-for="skillName in excludedSkills" :key="skillName" class="item-tag exclude">{{ translateSkillName(skillName) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <SelectionTabs
+          :includedUnits="includedUnits"
+          @update:includedUnits="val => includedUnits = val"
+          :excludedUnits="excludedUnits"
+          @update:excludedUnits="val => excludedUnits = val"
+          :includedSkills="includedSkills"
+          @update:includedSkills="val => includedSkills = val"
+          :excludedSkills="excludedSkills"
+          @update:excludedSkills="val => excludedSkills = val"
+        />
+      </div>
+      <div class="actions-between-sections">
+        <button class="generate-button" @click="generateTeamHandler">チームを生成する</button>
+        <button class="reset-button" @click="resetConditions">条件をリセット</button>
       </div>
       <div class="content">
         <TeamList :teams="generatedTeams" />
@@ -25,63 +61,59 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import TheHeader from './components/TheHeader.vue';
-import UnitSelector from './components/UnitSelector.vue';
-import SkillSelector from './components/SkillSelector.vue';
+import SelectionTabs from './components/SelectionTabs.vue';
 import TeamList from './components/TeamList.vue';
 import { generateTeams, UNIT_ATTRIBUTES, SKILL_CONDITIONS } from './logic.js';
 
-const selectedUnits = reactive({});
-const selectedSkills = reactive({});
+const includedUnits = ref([]);
+const excludedUnits = ref([]);
+const includedSkills = ref([]);
+const excludedSkills = ref([]);
 const minSkillCount = ref(5);
 const generatedTeams = ref([]);
 
-function generateTeamHandler() {
-  const includedUnitNames = Object.keys(selectedUnits).filter(name => selectedUnits[name] === 'include');
-  const excludedUnitNames = Object.keys(selectedUnits).filter(name => selectedUnits[name] === 'exclude');
-  const includedSkillNames = Object.keys(selectedSkills).filter(name => selectedSkills[name] === 'include');
-  const excludedSkillNames = Object.keys(selectedSkills).filter(name => selectedSkills[name] === 'exclude');
+const roleTranslations = {
+  'ace': 'エース',
+  'assassin': 'アサシン',
+  'avenger': 'アベンジャー',
+  'fighter': 'ファイター',
+  'clan': 'クラン',
+  'goblin': 'ゴブリン',
+  'tank': 'タンク',
+  'elite': 'エリート',
+  'shooter': 'シューター',
+  'thrower': 'スロワー',
+  'undead': 'アンデッド',
+};
 
+function translateSkillName(skillName) {
+  const match = skillName.match(/^([a-z]+)(\d*)$/);
+  if (match) {
+    const rolePart = match[1];
+    const numberPart = match[2];
+    const translatedRole = roleTranslations[rolePart] || rolePart;
+    return translatedRole + numberPart;
+  }
+  return skillName;
+}
+
+function generateTeamHandler() {
   generatedTeams.value = generateTeams({
-    includedUnits: includedUnitNames,
-    excludedUnits: excludedUnitNames,
-    includedSkills: includedSkillNames,
-    excludedSkills: excludedSkillNames,
+    includedUnits: includedUnits.value,
+    excludedUnits: excludedUnits.value,
+    includedSkills: includedSkills.value,
+    excludedSkills: excludedSkills.value,
     minSkillCount: minSkillCount.value,
   });
 }
 
 function resetConditions() {
-  // selectedUnits と selectedSkills をクリア
-  for (const key in selectedUnits) {
-    delete selectedUnits[key];
-  }
-  for (const key in selectedSkills) {
-    delete selectedSkills[key];
-  }
+  includedUnits.value = [];
+  excludedUnits.value = [];
+  includedSkills.value = [];
+  excludedSkills.value = [];
   minSkillCount.value = 5; // デフォルト値に戻す
   generatedTeams.value = []; // 結果もクリア
-}
-
-function updateUnitsSelection(newSelection) {
-  // selectedUnits をクリア
-  for (const key in selectedUnits) {
-    delete selectedUnits[key];
-  }
-  // 新しい選択状態をコピー
-  for (const key in newSelection) {
-    selectedUnits[key] = newSelection[key];
-  }
-}
-
-function updateSkillsSelection(newSelection) {
-  // selectedSkills をクリア
-  for (const key in selectedSkills) {
-    delete selectedSkills[key];
-  }
-  // 新しい選択状態をコピー
-  for (const key in newSelection) {
-    selectedSkills[key] = newSelection[key];
-  }
 }
 </script>
 
@@ -95,57 +127,114 @@ function updateSkillsSelection(newSelection) {
 
 .main-container {
   display: flex;
+  flex-direction: column;
   flex: 1;
 }
 
 .sidebar {
-  width: 30%;
   padding: 20px;
-  background-color: #f4f4f4;
-  border-right: 1px solid #ddd;
+  /* background-color: #f4f4f4; */ /* Remove background to integrate with app background */
+  /* border-bottom: 1px solid #ddd; */ /* Remove border for cleaner look */
 }
 
 .content {
-  width: 70%;
   padding: 20px;
 }
 
-.actions {
-  margin-bottom: 20px;
+.actions-between-sections {
+  margin: 20px;
+  display: flex;
+  gap: 10px;
 }
 
 .generate-button, .reset-button {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px; /* ボタン間のスペース */
+  flex: 1; /* Make buttons take equal width */
+  padding: 12px 20px; /* More padding for better touch targets */
   border: none;
-  border-radius: 5px;
+  border-radius: 8px; /* Slightly larger border-radius */
   cursor: pointer;
+  font-size: 1.1em;
+  font-weight: 600;
+  transition: background-color 0.3s ease; /* Smooth transition */
 }
 
 .generate-button {
-  background-color: #42b983;
+  background-color: #4CAF50; /* A more vibrant green */
   color: white;
 }
 
+.generate-button:hover {
+  background-color: #45a049;
+}
+
 .reset-button {
-  background-color: #ccc;
+  background-color: #f44336; /* A clear red for reset */
+  color: white;
+}
+
+.reset-button:hover {
+  background-color: #da190b;
 }
 
 .min-skill-count-setting {
   margin-bottom: 20px;
   display: flex;
   align-items: center;
+  background-color: #f9f9f9; /* Light background for setting */
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #eee;
 }
 
 .min-skill-count-setting label {
   margin-right: 10px;
+  font-weight: 500;
 }
 
 .min-skill-count-setting input {
   width: 60px;
-  padding: 5px;
+  padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  text-align: center;
+}
+
+.selected-items-display {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 5px;
+}
+
+.selected-items-display h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 1em;
+}
+
+.item-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.item-tag {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.item-tag.include {
+  background-color: #e8f5e9; /* Light green */
+  color: #2e7d32; /* Dark green */
+}
+
+.item-tag.exclude {
+  background-color: #ffebee; /* Light red */
+  color: #c62828; /* Dark red */
 }
 </style>

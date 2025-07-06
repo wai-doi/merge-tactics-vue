@@ -4,31 +4,47 @@
     <div v-if="teams.length === 0" class="no-results">
       <p>条件に合うチームが見つかりませんでした。条件を変更して再度お試しください。</p>
     </div>
-    <div v-else class="team-list">
-      <div v-for="(team, index) in teams" :key="index" class="team-card">
-        <h3>発動スキル数: {{ team.skills.length }}</h3>
-        <div class="skills">
-          <span 
-            v-for="skill in team.skills" 
-            :key="skill.name" 
-            class="skill-tag"
-            :class="skill.role"
-          >{{ translateSkillName(skill.name) }}</span>
-        </div>
-        <h4>ユニット:</h4>
-        <ul class="unit-list">
-          <li v-for="unit in team.units" :key="unit.name">{{ unit.name }} ({{ translateRoles(unit.role).join(', ') }})</li>
-        </ul>
-        <h4>ロール:</h4>
-        <div class="role-counts">
-          <template v-for="roleName in orderedRoles" :key="roleName">
-            <span 
-              v-if="team.roles[roleName]"
-              class="role-item"
-            >{{ translateRole(roleName) }}: {{ team.roles[roleName] }}</span>
-          </template>
-        </div>
-      </div>
+    <div v-else class="team-table-container">
+      <table class="team-table">
+        <thead>
+          <tr>
+            <th>スキル数</th>
+            <th>スキル</th>
+            <th>ユニット</th>
+            <th>ロール</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(team, index) in teams" :key="index">
+            <td>{{ team.skills.length }}</td>
+            <td>
+              <div class="skills">
+                <span 
+                  v-for="skill in team.skills" 
+                  :key="skill.name" 
+                  class="skill-tag"
+                  :class="skill.role"
+                >{{ translateSkillName(skill.name) }}</span>
+              </div>
+            </td>
+            <td>
+              <ul class="unit-list">
+                <li v-for="unit in team.units" :key="unit.name">{{ unit.name }} ({{ translateRoles(unit.role).join(', ') }})</li>
+              </ul>
+            </td>
+            <td>
+              <div class="role-counts">
+                <template v-for="roleName in orderedRoles" :key="roleName">
+                  <span 
+                    v-if="team.roles[roleName]"
+                    class="role-item"
+                  >{{ translateRole(roleName) }}: {{ team.roles[roleName] }}</span>
+                </template>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -91,27 +107,41 @@ function translateSkillName(skillName) {
   text-align: center;
 }
 
-.team-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+.team-table-container {
+  overflow-x: auto;
 }
 
-.team-card {
-  background-color: white;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  padding: 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+.team-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
-.team-card h3 {
-  margin-top: 0;
-  color: #333;
+.team-table th,
+.team-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.team-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.team-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.team-table tbody tr:hover {
+  background-color: #f1f1f1;
 }
 
 .skills {
-  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 
 .skill-tag {
@@ -120,8 +150,6 @@ function translateSkillName(skillName) {
   color: #00796b; /* Default Dark teal */
   padding: 4px 8px;
   border-radius: 12px;
-  margin-right: 5px;
-  margin-bottom: 5px;
   font-size: 0.85em;
 }
 
@@ -174,7 +202,7 @@ function translateSkillName(skillName) {
 .unit-list {
   list-style: none;
   padding: 0;
-  margin: 0 0 10px 0;
+  margin: 0;
 }
 
 .unit-list li {

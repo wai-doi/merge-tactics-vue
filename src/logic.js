@@ -70,20 +70,20 @@ function* combinations(array, k) {
 
 export function generateTeams(options) {
   const {
-    includedUnits: includedUnitNames = [],
-    excludedUnits: excludedUnitNames = [],
+    includedUnits = [],
+    excludedUnits = [],
     includedSkills = [],
     excludedSkills = [],
     minSkillCount = 5,
   } = options;
 
   // 実際に含めるユニットオブジェクト
-  const actualIncludedUnits = includedUnitNames.map(name => UNIT_ATTRIBUTES.find(u => u.name === name));
+  const actualIncludedUnits = includedUnits.map(name => UNIT_ATTRIBUTES.find(u => u.name === name));
 
   // 組み合わせ生成の対象となるユニットプール
   const combinableUnits = UNIT_ATTRIBUTES.filter(unit =>
-    !excludedUnitNames.includes(unit.name) && // 除外ユニットではない
-    !includedUnitNames.includes(unit.name)    // 既に含める指定されたユニットではない
+    !excludedUnits.includes(unit.name) && // 除外ユニットではない
+    !includedUnits.includes(unit.name)    // 既に含める指定されたユニットではない
   );
 
   // 残りのユニットから選ぶ数
