@@ -53,7 +53,7 @@
         />
       </div>
       <div class="actions-between-sections">
-        <button class="generate-button" @click="generateTeamHandler">チームを生成する</button>
+        <button class="generate-button" @click="generateTeamHandler" :disabled="isGenerating">{{ isGenerating ? '生成中...' : 'チームを生成する' }}</button>
         <button class="reset-button" @click="resetConditions">条件をリセット</button>
       </div>
       <div class="content">
@@ -77,6 +77,7 @@ const excludedSkills = ref([]);
 const minSkillCount = ref(5);
 const teamSize = ref(6); // デフォルトのチームユニット数を6に設定
 const generatedTeams = ref([]);
+const isGenerating = ref(false); // 生成中かどうかを示す状態
 
 const roleTranslations = {
   'ace': 'エース',
@@ -103,15 +104,19 @@ function translateSkillName(skillName) {
   return skillName;
 }
 
-function generateTeamHandler() {
+async function generateTeamHandler() {
+  isGenerating.value = true; // 生成開始
   generatedTeams.value = generateTeams({
     includedUnits: includedUnits.value,
     excludedUnits: excludedUnits.value,
     includedSkills: includedSkills.value,
     excludedSkills: excludedSkills.value,
     minSkillCount: minSkillCount.value,
-    teamSize: teamSize.value, // チームユニット数を追加
+    teamSize: teamSize.value,
   });
+  // 最小表示時間を確保するために短い遅延を追加
+  await new Promise(resolve => setTimeout(resolve, 500));
+  isGenerating.value = false; // 生成終了
 }
 
 function resetConditions() {
