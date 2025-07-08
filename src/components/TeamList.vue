@@ -29,7 +29,7 @@
             </td>
             <td>
               <ul class="unit-list">
-                <li v-for="unit in team.units" :key="unit.name">{{ unit.name }} ({{ translateRoles(unit.role).join(', ') }})</li>
+                <li v-for="unit in team.units" :key="unit.name" v-tippy="translateRoles(unit.role).join(', ')">{{ unit.name }}</li>
               </ul>
             </td>
             <td>
