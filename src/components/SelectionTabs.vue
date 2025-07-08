@@ -221,7 +221,7 @@ function toggleSelection(name, category) {
 
 .grid-items {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Adjust column width as needed */
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Adjust column width as needed */
   gap: 10px;
 }
 
@@ -233,6 +233,7 @@ function toggleSelection(name, category) {
   cursor: pointer;
   text-align: center;
   transition: background-color 0.2s ease, border-color 0.2s ease;
+  white-space: nowrap; /* 改行しないように設定 */
 }
 
 .item:hover {
