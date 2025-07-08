@@ -24,8 +24,6 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  flex-direction: column;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -59,11 +57,14 @@ button:focus-visible {
 }
 
 #app {
-  padding: 20px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
   background-color: #fff; /* White background for the app content */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  margin: 20px; /* Add some margin around the app */
+  margin: 20px auto; /* Center the app with some margin */
 }
 
 @media (prefers-color-scheme: light) {
