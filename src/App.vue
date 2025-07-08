@@ -156,6 +156,7 @@ function resetConditions() {
   font-size: 1.1em;
   font-weight: 600;
   transition: background-color 0.3s ease; /* Smooth transition */
+  outline: none; /* Remove focus outline */
 }
 
 .generate-button {
