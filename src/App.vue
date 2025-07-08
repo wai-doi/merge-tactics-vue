@@ -4,6 +4,11 @@
     <main class="main-container">
       <div class="sidebar">
         <h2>条件設定</h2>
+        <div class="team-size-setting">
+          <label for="teamSize">チームユニット数:</label>
+          <input type="number" id="teamSize" v-model.number="teamSize" min="1" max="10">
+        </div>
+
         <div class="min-skill-count-setting">
           <label for="minSkillCount">最低発動スキル数:</label>
           <input type="number" id="minSkillCount" v-model.number="minSkillCount" min="1" max="10">
@@ -70,6 +75,7 @@ const excludedUnits = ref([]);
 const includedSkills = ref([]);
 const excludedSkills = ref([]);
 const minSkillCount = ref(5);
+const teamSize = ref(6); // デフォルトのチームユニット数を6に設定
 const generatedTeams = ref([]);
 
 const roleTranslations = {
@@ -104,6 +110,7 @@ function generateTeamHandler() {
     includedSkills: includedSkills.value,
     excludedSkills: excludedSkills.value,
     minSkillCount: minSkillCount.value,
+    teamSize: teamSize.value, // チームユニット数を追加
   });
 }
 
@@ -113,6 +120,7 @@ function resetConditions() {
   includedSkills.value = [];
   excludedSkills.value = [];
   minSkillCount.value = 5; // デフォルト値に戻す
+  teamSize.value = 6; // チームユニット数をデフォルト値に戻す
   generatedTeams.value = []; // 結果もクリア
 }
 </script>
@@ -193,6 +201,29 @@ function resetConditions() {
 }
 
 .min-skill-count-setting input {
+  width: 60px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.team-size-setting {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #eee;
+}
+
+.team-size-setting label {
+  margin-right: 10px;
+  font-weight: 500;
+}
+
+.team-size-setting input {
   width: 60px;
   padding: 8px;
   border: 1px solid #ccc;

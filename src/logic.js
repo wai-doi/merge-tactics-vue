@@ -42,8 +42,6 @@ export const SKILL_CONDITIONS = [
   { name: 'undead2', role: 'undead', count: 4 },
 ];
 
-const TEAM_SIZE = 6;
-
 // 組み合わせを生成するジェネレータ関数
 function* combinations(array, k) {
   const n = array.length;
@@ -75,6 +73,7 @@ export function generateTeams(options) {
     includedSkills = [],
     excludedSkills = [],
     minSkillCount = 5,
+    teamSize = 6, // デフォルト値を6に設定
   } = options;
 
   // 実際に含めるユニットオブジェクト
@@ -87,7 +86,7 @@ export function generateTeams(options) {
   );
 
   // 残りのユニットから選ぶ数
-  const unitsToPick = TEAM_SIZE - actualIncludedUnits.length;
+  const unitsToPick = teamSize - actualIncludedUnits.length;
 
   // 選択するユニット数が負になる、または選択可能なユニット数を超える場合は、有効な組み合わせがない
   if (unitsToPick < 0 || unitsToPick > combinableUnits.length) {
@@ -102,7 +101,7 @@ export function generateTeams(options) {
     const currentUnits = [...actualIncludedUnits, ...unitCombination];
 
     // チームサイズが正しいことを確認（念のため）
-    if (currentUnits.length !== TEAM_SIZE) {
+    if (currentUnits.length !== teamSize) {
         continue;
     }
 
