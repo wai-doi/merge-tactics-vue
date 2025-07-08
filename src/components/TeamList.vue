@@ -169,7 +169,7 @@ function translateSkillName(skillName) {
   color: #333;
 }
 .skill-tag.goblin {
-  background-color: lime;
+  background-color: #8BC34A; /* Light Green */
   color: #333;
 }
 .skill-tag.assassin {
