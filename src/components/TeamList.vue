@@ -11,7 +11,6 @@
             <th>スキル数</th>
             <th>スキル</th>
             <th>ユニット</th>
-            <th>ロール</th>
           </tr>
         </thead>
         <tbody>
@@ -31,16 +30,6 @@
               <ul class="unit-list">
                 <li v-for="unit in team.units" :key="unit.name" v-tippy="translateRoles(unit.role).join(', ')">{{ unit.name }}</li>
               </ul>
-            </td>
-            <td>
-              <div class="role-counts">
-                <template v-for="roleName in orderedRoles" :key="roleName">
-                  <span 
-                    v-if="team.roles[roleName]"
-                    class="role-item"
-                  >{{ translateRole(roleName) }}: {{ team.roles[roleName] }}</span>
-                </template>
-              </div>
             </td>
           </tr>
         </tbody>
@@ -202,13 +191,16 @@ function translateSkillName(skillName) {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2列表示 */
+  gap: 5px; /* アイテム間の隙間 */
 }
 
 .unit-list li {
   background-color: #f0f0f0;
   padding: 3px 8px;
   border-radius: 4px;
-  margin-bottom: 3px;
+  /* margin-bottom: 3px; */ /* gapで代替 */
   font-size: 0.9em;
 }
 
