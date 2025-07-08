@@ -134,9 +134,7 @@ function translateSkillName(skillName) {
   background-color: #f9f9f9;
 }
 
-.team-table tbody tr:hover {
-  background-color: #f1f1f1;
-}
+
 
 .skills {
   display: flex;
