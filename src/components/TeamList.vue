@@ -128,6 +128,7 @@ function translateSkillName(skillName) {
 .team-table th {
   background-color: #f2f2f2;
   font-weight: bold;
+  white-space: nowrap;
 }
 
 .team-table tbody tr:nth-child(even) {
