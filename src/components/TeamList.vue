@@ -154,48 +154,48 @@ function translateSkillName(skillName) {
 }
 
 /* Skill role specific colors */
-.skill-tag.ace {
-  background-color: #FFD700; /* Gold */
-  color: #333;
-}
-.skill-tag.assassin {
-  background-color: #FF6347; /* Tomato */
-  color: white;
-}
-.skill-tag.avenger {
-  background-color: #BA55D3; /* MediumOrchid */
-  color: white;
-}
-.skill-tag.fighter {
-  background-color: #8B4513; /* SaddleBrown */
-  color: white;
-}
-.skill-tag.clan {
-  background-color: #4682B4; /* SteelBlue */
-  color: white;
-}
-.skill-tag.goblin {
-  background-color: #32CD32; /* LimeGreen */
+.skill-tag.elite {
+  background-color: gold;
   color: #333;
 }
 .skill-tag.tank {
-  background-color: #6A5ACD; /* SlateBlue */
-  color: white;
+  background-color: khaki;
+  color: #333;
 }
-.skill-tag.elite {
-  background-color: #FF4500; /* OrangeRed */
+.skill-tag.clan {
+  background-color: dodgerblue;
   color: white;
 }
 .skill-tag.shooter {
-  background-color: #20B2AA; /* LightSeaGreen */
+  background-color: aquamarine;
+  color: #333;
+}
+.skill-tag.goblin {
+  background-color: lime;
+  color: #333;
+}
+.skill-tag.assassin {
+  background-color: crimson;
+  color: white;
+}
+.skill-tag.undead {
+  background-color: teal;
+  color: white;
+}
+.skill-tag.fighter {
+  background-color: orange;
+  color: #333;
+}
+.skill-tag.avenger {
+  background-color: hotpink;
+  color: white;
+}
+.skill-tag.ace {
+  background-color: purple;
   color: white;
 }
 .skill-tag.thrower {
-  background-color: #DAA520; /* Goldenrod */
-  color: #333;
-}
-.skill-tag.undead {
-  background-color: #708090; /* SlateGray */
+  background-color: saddlebrown;
   color: white;
 }
 
