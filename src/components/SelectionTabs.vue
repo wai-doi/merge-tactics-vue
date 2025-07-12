@@ -1,8 +1,13 @@
 <template>
   <div class="selection-tabs-container">
+    <div class="tabs">
+      <button :class="{ active: activeTab === 'includeUnits' }" @click="activeTab = 'includeUnits'">ユニット選択</button>
+      <button :class="{ active: activeTab === 'includeSkills' }" @click="activeTab = 'includeSkills'">スキル選択</button>
+    </div>
+
     <div class="selection-list">
-      <div class="tab-content-include-units">
-        <h4>ユニットとスキルを選択</h4>
+      <div v-if="activeTab === 'includeUnits'" class="tab-content-include-units">
+        <h4>ユニットを選択</h4>
         <div class="unit-selection-table-container">
           <table class="unit-selection-table">
             <thead>
@@ -11,8 +16,7 @@
                 <th
                   v-for="colRole in columnRoles"
                   :key="colRole"
-                  @click="toggleSkillSelectionByRole(colRole)"
-                  :class="[{ 'selected-header': isRoleHeaderSelected(colRole) }, colRole]"
+                  :class="[colRole]"
                 >
                   {{ translateRoleName(colRole) }}
                 </th>
@@ -21,8 +25,7 @@
             <tbody>
               <tr v-for="rowRole in rowRoles" :key="rowRole">
                 <th
-                  @click="toggleSkillSelectionByRole(rowRole)"
-                  :class="[{ 'selected-header': isRoleHeaderSelected(rowRole) }, rowRole]"
+                  :class="[rowRole]"
                 >
                   {{ translateRoleName(rowRole) }}
                 </th>
@@ -42,6 +45,26 @@
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <div v-if="activeTab === 'includeSkills'" class="tab-content-include-skills">
+        <h4>スキルを選択</h4>
+        <div class="skill-selection-grid">
+          <div v-for="role in orderedRoles" :key="role" class="skill-role-group" :class="[role]">
+            <h5 :class="[role]">{{ translateRoleName(role) }}</h5>
+            <div class="skill-items">
+              <div
+                v-for="skill in skillsByRole[role]"
+                :key="skill.name"
+                class="skill-item"
+                :class="{ 'selected-item': isSelected(skill.name, 'includeSkills') }"
+                @click="toggleSelection(skill.name, 'includeSkills')"
+              >
+                {{ translateSkillName(skill.name) }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -81,6 +104,8 @@ const roleTranslations = {
 const columnRoles = ['tank', 'fighter', 'assassin', 'shooter', 'thrower', 'avenger'];
 const rowRoles = ['elite', 'clan', 'ace', 'undead', 'goblin'];
 
+const orderedRoles = ROLE_ORDER; // logic.jsからインポートしたROLE_ORDERを使用
+
 // ロールごとにユニットをグループ化
 const unitsByRoleIntersection = computed(() => {
   const grouped = {};
@@ -91,6 +116,15 @@ const unitsByRoleIntersection = computed(() => {
         unit.role.includes(rowRole) && unit.role.includes(colRole)
       );
     });
+  });
+  return grouped;
+});
+
+// ロールごとにスキルをグループ化
+const skillsByRole = computed(() => {
+  const grouped = {};
+  orderedRoles.forEach(role => {
+    grouped[role] = allSkills.value.filter(skill => skill.role === role);
   });
   return grouped;
 });
@@ -136,40 +170,6 @@ function toggleSelection(name, category) {
   }
   emit(updateEvent, currentArray);
 }
-
-function toggleSkillSelectionByRole(roleName) {
-  const skillsForRole = allSkills.value.filter(skill => skill.role === roleName);
-  const currentIncludedSkills = [...props.includedSkills];
-
-  const allSkillsInRoleSelected = skillsForRole.every(skill =>
-    currentIncludedSkills.includes(skill.name)
-  );
-
-  if (allSkillsInRoleSelected) {
-    // すべて選択されている場合は解除
-    skillsForRole.forEach(skill => {
-      const index = currentIncludedSkills.indexOf(skill.name);
-      if (index > -1) {
-        currentIncludedSkills.splice(index, 1);
-      }
-    });
-  } else {
-    // 一部または全く選択されていない場合はすべて選択
-    skillsForRole.forEach(skill => {
-      if (!currentIncludedSkills.includes(skill.name)) {
-        currentIncludedSkills.push(skill.name);
-      }
-    });
-  }
-  emit('update:includedSkills', currentIncludedSkills);
-}
-
-const isRoleHeaderSelected = computed(() => (roleName) => {
-  const skillsForRole = allSkills.value.filter(skill => skill.role === roleName);
-  if (skillsForRole.length === 0) return false; // そのロールにスキルがない場合は選択状態ではない
-  const isSelected = skillsForRole.every(skill => props.includedSkills.includes(skill.name));
-  return isSelected;
-});
 </script>
 
 <style scoped>
@@ -181,6 +181,7 @@ const isRoleHeaderSelected = computed(() => (roleName) => {
   border: 1px solid #eee;
   border-radius: 8px;
   overflow: hidden;
+  user-select: none;
 }
 
 .tabs {
@@ -231,7 +232,6 @@ const isRoleHeaderSelected = computed(() => (roleName) => {
 .unit-selection-table {
   width: 100%;
   border-collapse: collapse;
-  user-select: none;
 }
 
 .unit-selection-table th,
@@ -303,17 +303,90 @@ const isRoleHeaderSelected = computed(() => (roleName) => {
   transition: background-color 0.2s ease; /* Add transition for hover effect */
 }
 
-.unit-selection-table th[class] {
-  cursor: pointer; /* Add cursor pointer for clickable headers */
+.skill-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
 }
 
-.unit-selection-table th[class]:hover {
-  box-shadow: inset 0 0 0 3px var(--primary-color); /* プライマリカラーの太いボーダー */
+.skill-role-group {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 10px;
 }
 
-.unit-selection-table th.selected-header {
-  box-shadow: inset 0 0 0 3px var(--primary-color); /* 内側に3pxの緑色のボーダー */
-  /* color: inherit; */ /* テキストの色はそのまま */
+.skill-role-group.elite {
+  background-color: #FFD70050; /* Gold with transparency */
+}
+.skill-role-group.tank {
+  background-color: #F0E68C50; /* Khaki with transparency */
+}
+.skill-role-group.clan {
+  background-color: #1E90FF50; /* DodgerBlue with transparency */
+}
+.skill-role-group.shooter {
+  background-color: #7FFFD450; /* Aquamarine with transparency */
+}
+.skill-role-group.goblin {
+  background-color: #8BC34A50; /* Light Green with transparency */
+}
+.skill-role-group.assassin {
+  background-color: #DC143C50; /* Crimson with transparency */
+}
+.skill-role-group.undead {
+  background-color: #00808050; /* Teal with transparency */
+}
+.skill-role-group.fighter {
+  background-color: #FFA50050; /* Orange with transparency */
+}
+.skill-role-group.avenger {
+  background-color: #FF69B450; /* HotPink with transparency */
+}
+.skill-role-group.ace {
+  background-color: #80008050; /* Purple with transparency */
+}
+.skill-role-group.thrower {
+  background-color: #8B451350; /* SaddleBrown with transparency */
+}
+
+.skill-role-group h5 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1em;
+  text-align: center;
+  padding-bottom: 5px;
+}
+
+.skill-items {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.skill-item {
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.skill-item:hover {
+  border-color: var(--primary-color-hover);
+}
+
+.skill-item.selected-item {
+  background-color: var(--primary-color) !important;
+  color: white;
+  border-color: var(--primary-color) !important;
+}
+
+.skill-item.selected-item:hover {
+  background-color: var(--primary-color-hover) !important;
+  border-color: var(--primary-color-hover) !important;
 }
 
 .unit-selection-table thead th {
