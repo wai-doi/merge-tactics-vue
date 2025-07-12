@@ -2,7 +2,7 @@
   <div class="selection-tabs-container">
     <div class="selection-list">
       <div class="tab-content-include-units">
-        <h4>含めるユニットを選択</h4>
+        <h4>ユニットとスキルを選択</h4>
         <div class="unit-selection-table-container">
           <table class="unit-selection-table">
             <thead>
@@ -12,7 +12,7 @@
                   v-for="colRole in columnRoles"
                   :key="colRole"
                   @click="toggleSkillSelectionByRole(colRole)"
-                  :class="{ 'selected-header': isRoleHeaderSelected(colRole) }"
+                  :class="[{ 'selected-header': isRoleHeaderSelected(colRole) }, colRole]"
                 >
                   {{ translateRoleName(colRole) }}
                 </th>
@@ -22,7 +22,7 @@
               <tr v-for="rowRole in rowRoles" :key="rowRole">
                 <th
                   @click="toggleSkillSelectionByRole(rowRole)"
-                  :class="{ 'selected-header': isRoleHeaderSelected(rowRole) }"
+                  :class="[{ 'selected-header': isRoleHeaderSelected(rowRole) }, rowRole]"
                 >
                   {{ translateRoleName(rowRole) }}
                 </th>
@@ -167,7 +167,8 @@ function toggleSkillSelectionByRole(roleName) {
 const isRoleHeaderSelected = computed(() => (roleName) => {
   const skillsForRole = allSkills.value.filter(skill => skill.role === roleName);
   if (skillsForRole.length === 0) return false; // そのロールにスキルがない場合は選択状態ではない
-  return skillsForRole.every(skill => props.includedSkills.includes(skill.name));
+  const isSelected = skillsForRole.every(skill => props.includedSkills.includes(skill.name));
+  return isSelected;
 });
 </script>
 
@@ -245,6 +246,61 @@ const isRoleHeaderSelected = computed(() => (roleName) => {
   vertical-align: top;
 }
 
+.unit-selection-table th.elite {
+  background-color: #FFD70050; /* Gold with transparency */
+  color: #333;
+}
+
+.unit-selection-table th.tank {
+  background-color: #F0E68C50; /* Khaki with transparency */
+  color: #333;
+}
+
+.unit-selection-table th.clan {
+  background-color: #1E90FF50; /* DodgerBlue with transparency */
+  color: #333;
+}
+
+.unit-selection-table th.shooter {
+  background-color: #7FFFD450; /* Aquamarine with transparency */
+  color: #333;
+}
+
+.unit-selection-table th.goblin {
+  background-color: #8BC34A50; /* Light Green with transparency */
+  color: #333;
+}
+
+.unit-selection-table th.assassin {
+  background-color: #DC143C50; /* Crimson with transparency */
+  color: #333;
+}
+
+.unit-selection-table th.undead {
+  background-color: #00808050; /* Teal with transparency */
+  color: #333;
+}
+
+.unit-selection-table th.fighter {
+  background-color: #FFA50050; /* Orange with transparency */
+  color: #333;
+}
+
+.unit-selection-table th.avenger {
+  background-color: #FF69B450; /* HotPink with transparency */
+  color: #333;
+}
+
+.unit-selection-table th.ace {
+  background-color: #80008050; /* Purple with transparency */
+  color: #333;
+}
+
+.unit-selection-table th.thrower {
+  background-color: #8B451350; /* SaddleBrown with transparency */
+  color: #333;
+}
+
 .unit-selection-table th {
   background-color: #f9f9f9;
   font-weight: bold;
@@ -254,12 +310,12 @@ const isRoleHeaderSelected = computed(() => (roleName) => {
 }
 
 .unit-selection-table th:hover {
-  background-color: #e0e0e0; /* Lighter background on hover */
+  box-shadow: inset 0 0 0 2px #ccc; /* Lighter background on hover */
 }
 
 .unit-selection-table th.selected-header {
-  background-color: #4CAF50; /* Green background for selected headers */
-  color: white;
+  box-shadow: inset 0 0 0 3px #4CAF50; /* 内側に3pxの緑色のボーダー */
+  /* color: inherit; */ /* テキストの色はそのまま */
 }
 
 .unit-selection-table thead th {
