@@ -1,3 +1,8 @@
+export const ROLE_ORDER = [
+  'tank', 'fighter', 'assassin', 'shooter', 'thrower', 'avenger',
+  'elite', 'clan', 'goblin', 'ace', 'undead'
+];
+
 export const UNIT_ATTRIBUTES = [
   { name: 'ナイト', role: ['elite', 'tank'] },
   { name: 'アーチャー', role: ['clan', 'shooter'] },

@@ -15,21 +15,6 @@
           </div>
         </div>
 
-        <div class="selected-items-display" v-if="includedUnits.length > 0 || includedSkills.length > 0">
-          <div v-if="includedUnits.length > 0">
-            <h4>含めるユニット:</h4>
-            <div class="item-tags">
-              <span v-for="unitName in includedUnits" :key="unitName" class="item-tag include">{{ unitName }}</span>
-            </div>
-          </div>
-          <div v-if="includedSkills.length > 0">
-            <h4>含めるスキル:</h4>
-            <div class="item-tags">
-              <span v-for="skillName in includedSkills" :key="skillName" class="item-tag include">{{ translateSkillName(skillName) }}</span>
-            </div>
-          </div>
-        </div>
-
         <SelectionTabs
           :includedUnits="includedUnits"
           @update:includedUnits="val => includedUnits = val"
