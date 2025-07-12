@@ -4,14 +4,15 @@
     <main class="main-container">
       <div class="sidebar">
         <h2>条件設定</h2>
-        <div class="team-size-setting">
-          <label for="teamSize">チームユニット数:</label>
-          <input type="number" id="teamSize" v-model.number="teamSize" min="1" max="10">
-        </div>
-
-        <div class="min-skill-count-setting">
-          <label for="minSkillCount">最低発動スキル数:</label>
-          <input type="number" id="minSkillCount" v-model.number="minSkillCount" min="1" max="10">
+        <div class="settings-group">
+          <div class="team-size-setting">
+            <label for="teamSize">チームユニット数:</label>
+            <input type="number" id="teamSize" v-model.number="teamSize" min="1" max="10">
+          </div>
+          <div class="min-skill-count-setting">
+            <label for="minSkillCount">最低発動スキル数:</label>
+            <input type="number" id="minSkillCount" v-model.number="minSkillCount" min="1" max="10">
+          </div>
         </div>
 
         <div class="selected-items-display" v-if="includedUnits.length > 0 || excludedUnits.length > 0 || includedSkills.length > 0 || excludedSkills.length > 0">
@@ -190,45 +191,27 @@ function resetConditions() {
   background-color: #da190b;
 }
 
-.min-skill-count-setting {
-  margin-bottom: 20px;
+.settings-group {
   display: flex;
-  align-items: center;
-  background-color: #f9f9f9; /* Light background for setting */
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #eee;
-}
-
-.min-skill-count-setting label {
-  margin-right: 10px;
-  font-weight: 500;
-}
-
-.min-skill-count-setting input {
-  width: 60px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  text-align: center;
-}
-
-.team-size-setting {
+  gap: 20px;
   margin-bottom: 20px;
-  display: flex;
-  align-items: center;
   background-color: #f9f9f9;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #eee;
 }
 
-.team-size-setting label {
+.min-skill-count-setting, .team-size-setting {
+  display: flex;
+  align-items: center;
+}
+
+.min-skill-count-setting label, .team-size-setting label {
   margin-right: 10px;
   font-weight: 500;
 }
 
-.team-size-setting input {
+.min-skill-count-setting input, .team-size-setting input {
   width: 60px;
   padding: 8px;
   border: 1px solid #ccc;
