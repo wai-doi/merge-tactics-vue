@@ -239,7 +239,6 @@ const isRoleHeaderSelected = computed(() => (roleName) => {
   border: 1px solid #eee;
   padding: 8px;
   text-align: center;
-  vertical-align: top;
 }
 
 .unit-selection-table th.elite {
@@ -301,12 +300,15 @@ const isRoleHeaderSelected = computed(() => (roleName) => {
   background-color: #f9f9f9;
   font-weight: bold;
   white-space: nowrap;
-  cursor: pointer; /* Add cursor pointer for clickable headers */
   transition: background-color 0.2s ease; /* Add transition for hover effect */
 }
 
-.unit-selection-table th:hover {
-  box-shadow: inset 0 0 0 2px #ccc; /* Lighter background on hover */
+.unit-selection-table th[class] {
+  cursor: pointer; /* Add cursor pointer for clickable headers */
+}
+
+.unit-selection-table th[class]:hover {
+  box-shadow: inset 0 0 0 3px var(--primary-color); /* プライマリカラーの太いボーダー */
 }
 
 .unit-selection-table th.selected-header {
@@ -326,6 +328,7 @@ const isRoleHeaderSelected = computed(() => (roleName) => {
   left: 0;
   background-color: #f9f9f9;
   z-index: 1;
+  vertical-align: middle;
 }
 
 .unit-cell-content {
@@ -333,6 +336,8 @@ const isRoleHeaderSelected = computed(() => (roleName) => {
   flex-direction: column;
   gap: 5px;
   min-height: 50px; /* Adjust as needed */
+  justify-content: center;
+  align-items: center;
 }
 
 .unit-item {
