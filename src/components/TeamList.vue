@@ -1,6 +1,12 @@
 <template>
   <div>
     <h2>生成結果 ({{ teams.length }}件)</h2>
+    <div v-if="searchSummary.length > 0" class="search-summary">
+      <p>検索条件:</p>
+      <ul>
+        <li v-for="(part, index) in searchSummary" :key="index">{{ part }}</li>
+      </ul>
+    </div>
     <div v-if="teams.length === 0" class="no-results">
       <p>条件に合うチームが見つかりませんでした。条件を変更して再度お試しください。</p>
     </div>
@@ -18,9 +24,9 @@
             <td>{{ team.skills.length }}</td>
             <td>
               <div class="skills">
-                <span 
-                  v-for="skill in team.skills" 
-                  :key="skill.name" 
+                <span
+                  v-for="skill in team.skills"
+                  :key="skill.name"
                   class="skill-tag"
                   :class="skill.role"
                 >{{ translateSkillName(skill.name) }}</span>
@@ -39,13 +45,40 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from 'vue';
+import { defineProps, ref, computed } from 'vue';
 
 const props = defineProps({
   teams: {
     type: Array,
     default: () => [],
   },
+  searchConditions: {
+    type: Object,
+    default: () => ({ includedUnits: [], includedSkills: [], minSkillCount: 0, teamSize: 0 }),
+  },
+});
+
+const searchSummary = computed(() => {
+  const parts = [];
+  const { includedUnits, includedSkills, minSkillCount, teamSize } = props.searchConditions;
+
+  if (minSkillCount > 0) {
+    parts.push(`最低スキル数: ${minSkillCount}`);
+  }
+  if (teamSize > 0) {
+    parts.push(`チームサイズ: ${teamSize}`);
+  }
+  if (includedSkills.length > 0) {
+    parts.push(`スキル: ${includedSkills.map(translateSkillName).join(', ')}`);
+  }
+  if (includedUnits.length > 0) {
+    parts.push(`ユニット: ${includedUnits.join(', ')}`);
+  }
+
+  if (parts.length > 0) {
+    return parts;
+  }
+  return [];
 });
 
 const orderedRoles = ref([
@@ -216,5 +249,43 @@ function translateSkillName(skillName) {
   padding: 3px 7px;
   border-radius: 4px;
   font-size: 0.8em;
+}
+
+.search-summary {
+  font-size: 0.9em;
+  color: #555;
+  margin-top: -10px;
+  margin-bottom: 15px;
+  background-color: #eef;
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: 1px solid #dde;
+  text-align: left;
+}
+
+.search-summary p {
+  margin-top: 0;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.search-summary ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-summary li {
+  margin-bottom: 3px;
+  padding-left: 20px; /* 間隔を広げる */
+  position: relative;
+}
+
+.search-summary li::before {
+  content: '●'; /* 塗りつぶされた丸 */
+  position: absolute;
+  left: 0;
+  font-size: 0.9em; /* 少し大きく */
+  top: 1px; /* 微調整 */
 }
 </style>

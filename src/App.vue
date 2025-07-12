@@ -27,7 +27,10 @@
         <button class="reset-button" @click="resetConditions">条件をリセット</button>
       </div>
       <div class="content">
-        <TeamList :teams="generatedTeams" />
+        <TeamList
+          :teams="generatedTeams"
+          :searchConditions="lastSearchConditions"
+        />
       </div>
     </main>
   </div>
@@ -46,6 +49,12 @@ const minSkillCount = ref(5);
 const teamSize = ref(6); // デフォルトのチームユニット数を6に設定
 const generatedTeams = ref([]);
 const isGenerating = ref(false); // 生成中かどうかを示す状態
+const lastSearchConditions = reactive({ // 最後に検索した条件を保持
+  includedUnits: [],
+  includedSkills: [],
+  minSkillCount: 0,
+  teamSize: 0,
+});
 
 const roleTranslations = {
   'ace': 'エース',
@@ -74,6 +83,12 @@ function translateSkillName(skillName) {
 
 async function generateTeamHandler() {
   isGenerating.value = true; // 生成開始
+
+  // 検索条件を保存
+  lastSearchConditions.includedUnits = [...includedUnits.value];
+  lastSearchConditions.includedSkills = [...includedSkills.value];
+  lastSearchConditions.minSkillCount = minSkillCount.value;
+  lastSearchConditions.teamSize = teamSize.value;
   generatedTeams.value = generateTeams({
     includedUnits: includedUnits.value,
     includedSkills: includedSkills.value,
@@ -91,6 +106,12 @@ function resetConditions() {
   minSkillCount.value = 5; // デフォルト値に戻す
   teamSize.value = 6; // チームユニット数をデフォルト値に戻す
   generatedTeams.value = []; // 結果もクリア
+
+  // 検索条件もリセット
+  lastSearchConditions.includedUnits = [];
+  lastSearchConditions.includedSkills = [];
+  lastSearchConditions.minSkillCount = 0;
+  lastSearchConditions.teamSize = 0;
 }
 </script>
 
