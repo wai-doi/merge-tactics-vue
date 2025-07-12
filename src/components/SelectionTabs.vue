@@ -173,12 +173,7 @@ const isRoleHeaderSelected = computed(() => (roleName) => {
 </script>
 
 <style scoped>
-:root {
-  --primary-color: #4CAF50;
-  --primary-color-hover: #45a049;
-  --danger-color: #f44336;
-  --danger-color-hover: #da190b;
-}
+
 
 .selection-tabs-container {
   margin-top: 20px;
@@ -314,7 +309,7 @@ const isRoleHeaderSelected = computed(() => (roleName) => {
 }
 
 .unit-selection-table th.selected-header {
-  box-shadow: inset 0 0 0 3px #4CAF50; /* 内側に3pxの緑色のボーダー */
+  box-shadow: inset 0 0 0 3px var(--primary-color); /* 内側に3pxの緑色のボーダー */
   /* color: inherit; */ /* テキストの色はそのまま */
 }
 
@@ -355,14 +350,14 @@ const isRoleHeaderSelected = computed(() => (roleName) => {
 }
 
 .unit-item.selected-item {
-  background-color: #4CAF50 !important;
+  background-color: var(--primary-color) !important;
   color: white;
-  border-color: #4CAF50 !important;
+  border-color: var(--primary-color) !important;
 }
 
 .unit-item.selected-item:hover {
-  background-color: #45a049 !important;
-  border-color: #45a049 !important;
+  background-color: var(--primary-color-hover) !important;
+  border-color: var(--primary-color-hover) !important;
 }
 
 </style>

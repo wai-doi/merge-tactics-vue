@@ -146,12 +146,12 @@ function resetConditions() {
 }
 
 .reset-button {
-  background-color: #f44336; /* A clear red for reset */
+  background-color: var(--danger-color); /* A clear red for reset */
   color: white;
 }
 
 .reset-button:hover {
-  background-color: #da190b;
+  background-color: var(--danger-color-hover);
 }
 
 .settings-group {
