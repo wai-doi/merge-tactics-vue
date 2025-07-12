@@ -231,6 +231,7 @@ const isRoleHeaderSelected = computed(() => (roleName) => {
 .unit-selection-table {
   width: 100%;
   border-collapse: collapse;
+  user-select: none;
 }
 
 .unit-selection-table th,
