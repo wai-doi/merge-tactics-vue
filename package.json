@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "deploy": "gh-pages -d dist",
-    "preview": "vite preview",
-    "tailwind:init": "tailwindcss init -p"
+    "preview": "vite preview"
   },
   "dependencies": {
     "vue": "^3.5.17",
