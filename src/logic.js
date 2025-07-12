@@ -69,9 +69,7 @@ function* combinations(array, k) {
 export function generateTeams(options) {
   const {
     includedUnits = [],
-    excludedUnits = [],
     includedSkills = [],
-    excludedSkills = [],
     minSkillCount = 5,
     teamSize = 6, // デフォルト値を6に設定
   } = options;
@@ -81,7 +79,6 @@ export function generateTeams(options) {
 
   // 組み合わせ生成の対象となるユニットプール
   const combinableUnits = UNIT_ATTRIBUTES.filter(unit =>
-    !excludedUnits.includes(unit.name) && // 除外ユニットではない
     !includedUnits.includes(unit.name)    // 既に含める指定されたユニットではない
   );
 
@@ -111,7 +108,6 @@ export function generateTeams(options) {
     // フィルタリング条件
     if (skills.length < minSkillCount) continue;
     if (includedSkills.some(skillName => !skills.find(s => s.name === skillName))) continue;
-    if (excludedSkills.some(skillName => skills.find(s => s.name === skillName))) continue;
 
     teams.push({
       units: currentUnits,

@@ -2,9 +2,7 @@
   <div class="selection-tabs-container">
     <div class="tabs">
       <button :class="{ active: activeTab === 'includeUnits' }" @click="activeTab = 'includeUnits'">含めるユニット</button>
-      <button :class="{ active: activeTab === 'excludeUnits' }" @click="activeTab = 'excludeUnits'">含めないユニット</button>
       <button :class="{ active: activeTab === 'includeSkills' }" @click="activeTab = 'includeSkills'">含めるスキル</button>
-      <button :class="{ active: activeTab === 'excludeSkills' }" @click="activeTab = 'excludeSkills'">含めないスキル</button>
     </div>
 
     <div class="selection-list">
@@ -16,20 +14,6 @@
             :key="unit.name"
             :class="{ 'selected-item': isSelected(unit.name, 'includeUnits') }"
             @click="toggleSelection(unit.name, 'includeUnits')"
-            class="item"
-          >
-            {{ unit.name }}
-          </div>
-        </div>
-      </div>
-      <div v-else-if="activeTab === 'excludeUnits'" class="tab-content-exclude-units">
-        <h4>含めないユニットを選択</h4>
-        <div class="grid-items">
-          <div
-            v-for="unit in allUnits"
-            :key="unit.name"
-            :class="{ 'selected-item': isSelected(unit.name, 'excludeUnits'), 'exclude': isSelected(unit.name, 'excludeUnits') }"
-            @click="toggleSelection(unit.name, 'excludeUnits')"
             class="item"
           >
             {{ unit.name }}
@@ -50,20 +34,6 @@
           </div>
         </div>
       </div>
-      <div v-else-if="activeTab === 'excludeSkills'" class="tab-content-exclude-skills">
-        <h4>含めないスキルを選択</h4>
-        <div class="grid-items">
-          <div
-            v-for="skill in allSkills"
-            :key="skill.name"
-            :class="{ 'selected-item': isSelected(skill.name, 'excludeSkills'), 'exclude': isSelected(skill.name, 'excludeSkills') }"
-            @click="toggleSelection(skill.name, 'excludeSkills')"
-            class="item"
-          >
-            {{ translateSkillName(skill.name) }}
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -74,12 +44,10 @@ import { UNIT_ATTRIBUTES, SKILL_CONDITIONS } from '../logic.js';
 
 const props = defineProps({
   includedUnits: { type: Array, default: () => [] },
-  excludedUnits: { type: Array, default: () => [] },
   includedSkills: { type: Array, default: () => [] },
-  excludedSkills: { type: Array, default: () => [] },
 });
 
-const emit = defineEmits(['update:includedUnits', 'update:excludedUnits', 'update:includedSkills', 'update:excludedSkills']);
+const emit = defineEmits(['update:includedUnits', 'update:includedSkills']);
 
 const activeTab = ref('includeUnits'); // Default active tab
 
@@ -113,38 +81,20 @@ function translateSkillName(skillName) {
 
 function isSelected(name, category) {
   if (category === 'includeUnits') return props.includedUnits.includes(name);
-  if (category === 'excludeUnits') return props.excludedUnits.includes(name);
   if (category === 'includeSkills') return props.includedSkills.includes(name);
-  if (category === 'excludeSkills') return props.excludedSkills.includes(name);
   return false;
 }
 
 function toggleSelection(name, category) {
   let currentArray;
   let updateEvent;
-  let conflictingArray = [];
-  let conflictingUpdateEvent = '';
 
   if (category === 'includeUnits') {
     currentArray = [...props.includedUnits];
     updateEvent = 'update:includedUnits';
-    conflictingArray = [...props.excludedUnits];
-    conflictingUpdateEvent = 'update:excludedUnits';
-  } else if (category === 'excludeUnits') {
-    currentArray = [...props.excludedUnits];
-    updateEvent = 'update:excludedUnits';
-    conflictingArray = [...props.includedUnits];
-    conflictingUpdateEvent = 'update:includedUnits';
   } else if (category === 'includeSkills') {
     currentArray = [...props.includedSkills];
     updateEvent = 'update:includedSkills';
-    conflictingArray = [...props.excludedSkills];
-    conflictingUpdateEvent = 'update:excludedSkills';
-  } else if (category === 'excludeSkills') {
-    currentArray = [...props.excludedSkills];
-    updateEvent = 'update:excludedSkills';
-    conflictingArray = [...props.includedSkills];
-    conflictingUpdateEvent = 'update:includedSkills';
   }
 
   const index = currentArray.indexOf(name);
@@ -152,13 +102,6 @@ function toggleSelection(name, category) {
     currentArray.splice(index, 1); // Remove if already selected
   } else {
     currentArray.push(name); // Add if not selected
-
-    // Remove from conflicting category if exists
-    const conflictingIndex = conflictingArray.indexOf(name);
-    if (conflictingIndex > -1) {
-      conflictingArray.splice(conflictingIndex, 1);
-      emit(conflictingUpdateEvent, conflictingArray);
-    }
   }
   emit(updateEvent, currentArray);
 }
@@ -240,28 +183,9 @@ function toggleSelection(name, category) {
   border-color: var(--primary-color-hover); /* Change border color on hover */
 }
 
-.tab-content-exclude-units .item:hover,
-.tab-content-exclude-skills .item:hover {
-  border-color: var(--danger-color-hover); /* Red border on hover for excluded items */
-}
-
 .selected-item {
   background-color: #4CAF50 !important; /* Green for included */
   color: white;
   border-color: #4CAF50 !important;
-}
-
-.selected-item:hover {
-  border-color: #45a049 !important; /* Darker green border on hover */
-}
-
-/* For excluded items, use a different color */
-.selected-item.exclude {
-  background-color: #f44336 !important; /* Red for excluded */
-  border-color: #f44336 !important;
-}
-
-.selected-item.exclude:hover {
-  border-color: #da190b !important; /* Darker red border on hover */
 }
 </style>

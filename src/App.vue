@@ -15,17 +15,11 @@
           </div>
         </div>
 
-        <div class="selected-items-display" v-if="includedUnits.length > 0 || excludedUnits.length > 0 || includedSkills.length > 0 || excludedSkills.length > 0">
+        <div class="selected-items-display" v-if="includedUnits.length > 0 || includedSkills.length > 0">
           <div v-if="includedUnits.length > 0">
             <h4>含めるユニット:</h4>
             <div class="item-tags">
               <span v-for="unitName in includedUnits" :key="unitName" class="item-tag include">{{ unitName }}</span>
-            </div>
-          </div>
-          <div v-if="excludedUnits.length > 0">
-            <h4>含めないユニット:</h4>
-            <div class="item-tags">
-              <span v-for="unitName in excludedUnits" :key="unitName" class="item-tag exclude">{{ unitName }}</span>
             </div>
           </div>
           <div v-if="includedSkills.length > 0">
@@ -34,23 +28,13 @@
               <span v-for="skillName in includedSkills" :key="skillName" class="item-tag include">{{ translateSkillName(skillName) }}</span>
             </div>
           </div>
-          <div v-if="excludedSkills.length > 0">
-            <h4>含めないスキル:</h4>
-            <div class="item-tags">
-              <span v-for="skillName in excludedSkills" :key="skillName" class="item-tag exclude">{{ translateSkillName(skillName) }}</span>
-            </div>
-          </div>
         </div>
 
         <SelectionTabs
           :includedUnits="includedUnits"
           @update:includedUnits="val => includedUnits = val"
-          :excludedUnits="excludedUnits"
-          @update:excludedUnits="val => excludedUnits = val"
           :includedSkills="includedSkills"
           @update:includedSkills="val => includedSkills = val"
-          :excludedSkills="excludedSkills"
-          @update:excludedSkills="val => excludedSkills = val"
         />
       </div>
       <div class="actions-between-sections">
@@ -72,9 +56,7 @@ import TeamList from './components/TeamList.vue';
 import { generateTeams, UNIT_ATTRIBUTES, SKILL_CONDITIONS } from './logic.js';
 
 const includedUnits = ref([]);
-const excludedUnits = ref([]);
 const includedSkills = ref([]);
-const excludedSkills = ref([]);
 const minSkillCount = ref(5);
 const teamSize = ref(6); // デフォルトのチームユニット数を6に設定
 const generatedTeams = ref([]);
@@ -109,9 +91,7 @@ async function generateTeamHandler() {
   isGenerating.value = true; // 生成開始
   generatedTeams.value = generateTeams({
     includedUnits: includedUnits.value,
-    excludedUnits: excludedUnits.value,
     includedSkills: includedSkills.value,
-    excludedSkills: excludedSkills.value,
     minSkillCount: minSkillCount.value,
     teamSize: teamSize.value,
   });
@@ -122,9 +102,7 @@ async function generateTeamHandler() {
 
 function resetConditions() {
   includedUnits.value = [];
-  excludedUnits.value = [];
   includedSkills.value = [];
-  excludedSkills.value = [];
   minSkillCount.value = 5; // デフォルト値に戻す
   teamSize.value = 6; // チームユニット数をデフォルト値に戻す
   generatedTeams.value = []; // 結果もクリア
