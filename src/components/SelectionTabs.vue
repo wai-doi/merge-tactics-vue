@@ -242,58 +242,47 @@ function toggleSelection(name, category) {
 }
 
 .unit-selection-table th.elite {
-  background-color: #FFD70050; /* Gold with transparency */
-  color: #333;
+  background-color: var(--color-elite-transparent);
 }
 
 .unit-selection-table th.tank {
-  background-color: #F0E68C50; /* Khaki with transparency */
-  color: #333;
+  background-color: var(--color-tank-transparent);
 }
 
 .unit-selection-table th.clan {
-  background-color: #1E90FF50; /* DodgerBlue with transparency */
-  color: #333;
+  background-color: var(--color-clan-transparent);
 }
 
 .unit-selection-table th.shooter {
-  background-color: #7FFFD450; /* Aquamarine with transparency */
-  color: #333;
+  background-color: var(--color-shooter-transparent);
 }
 
 .unit-selection-table th.goblin {
-  background-color: #8BC34A50; /* Light Green with transparency */
-  color: #333;
+  background-color: var(--color-goblin-transparent);
 }
 
 .unit-selection-table th.assassin {
-  background-color: #DC143C50; /* Crimson with transparency */
-  color: #333;
+  background-color: var(--color-assassin-transparent);
 }
 
 .unit-selection-table th.undead {
-  background-color: #00808050; /* Teal with transparency */
-  color: #333;
+  background-color: var(--color-undead-transparent);
 }
 
 .unit-selection-table th.fighter {
-  background-color: #FFA50050; /* Orange with transparency */
-  color: #333;
+  background-color: var(--color-fighter-transparent);
 }
 
 .unit-selection-table th.avenger {
-  background-color: #FF69B450; /* HotPink with transparency */
-  color: #333;
+  background-color: var(--color-avenger-transparent);
 }
 
 .unit-selection-table th.ace {
-  background-color: #80008050; /* Purple with transparency */
-  color: #333;
+  background-color: var(--color-ace-transparent);
 }
 
 .unit-selection-table th.thrower {
-  background-color: #8B451350; /* SaddleBrown with transparency */
-  color: #333;
+  background-color: var(--color-thrower-transparent);
 }
 
 .unit-selection-table th {
@@ -316,37 +305,37 @@ function toggleSelection(name, category) {
 }
 
 .skill-role-group.elite {
-  background-color: #FFD70050; /* Gold with transparency */
+  background-color: var(--color-elite-transparent);
 }
 .skill-role-group.tank {
-  background-color: #F0E68C50; /* Khaki with transparency */
+  background-color: var(--color-tank-transparent);
 }
 .skill-role-group.clan {
-  background-color: #1E90FF50; /* DodgerBlue with transparency */
+  background-color: var(--color-clan-transparent);
 }
 .skill-role-group.shooter {
-  background-color: #7FFFD450; /* Aquamarine with transparency */
+  background-color: var(--color-shooter-transparent);
 }
 .skill-role-group.goblin {
-  background-color: #8BC34A50; /* Light Green with transparency */
+  background-color: var(--color-goblin-transparent);
 }
 .skill-role-group.assassin {
-  background-color: #DC143C50; /* Crimson with transparency */
+  background-color: var(--color-assassin-transparent);
 }
 .skill-role-group.undead {
-  background-color: #00808050; /* Teal with transparency */
+  background-color: var(--color-undead-transparent);
 }
 .skill-role-group.fighter {
-  background-color: #FFA50050; /* Orange with transparency */
+  background-color: var(--color-fighter-transparent);
 }
 .skill-role-group.avenger {
-  background-color: #FF69B450; /* HotPink with transparency */
+  background-color: var(--color-avenger-transparent);
 }
 .skill-role-group.ace {
-  background-color: #80008050; /* Purple with transparency */
+  background-color: var(--color-ace-transparent);
 }
 .skill-role-group.thrower {
-  background-color: #8B451350; /* SaddleBrown with transparency */
+  background-color: var(--color-thrower-transparent);
 }
 
 .skill-role-group h5 {

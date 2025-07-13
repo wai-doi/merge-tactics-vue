@@ -16,6 +16,41 @@
   --primary-color-hover: #45a049;
   --danger-color: #f44336;
   --danger-color-hover: #da190b;
+
+  /* Skill Role Colors */
+  --color-elite: #FFD700; /* Gold */
+  --color-elite-rgb: 255, 215, 0;
+  --color-elite-transparent: rgba(255, 215, 0, 0.3);
+  --color-tank: #F0E68C; /* Khaki */
+  --color-tank-rgb: 240, 230, 140;
+  --color-tank-transparent: rgba(240, 230, 140, 0.3);
+  --color-clan: #1E90FF; /* DodgerBlue */
+  --color-clan-rgb: 30, 144, 255;
+  --color-clan-transparent: rgba(30, 144, 255, 0.3);
+  --color-shooter: #7FFFD4; /* Aquamarine */
+  --color-shooter-rgb: 127, 255, 212;
+  --color-shooter-transparent: rgba(127, 255, 212, 0.3);
+  --color-goblin: #8BC34A; /* Light Green */
+  --color-goblin-rgb: 139, 195, 74;
+  --color-goblin-transparent: rgba(139, 195, 74, 0.3);
+  --color-assassin: #DC143C; /* Crimson */
+  --color-assassin-rgb: 220, 20, 60;
+  --color-assassin-transparent: rgba(220, 20, 60, 0.3);
+  --color-undead: #008080; /* Teal */
+  --color-undead-rgb: 0, 128, 128;
+  --color-undead-transparent: rgba(0, 128, 128, 0.3);
+  --color-fighter: #FFA500; /* Orange */
+  --color-fighter-rgb: 255, 165, 0;
+  --color-fighter-transparent: rgba(255, 165, 0, 0.3);
+  --color-avenger: #FF69B4; /* HotPink */
+  --color-avenger-rgb: 255, 105, 180;
+  --color-avenger-transparent: rgba(255, 105, 180, 0.3);
+  --color-ace: #800080; /* Purple */
+  --color-ace-rgb: 128, 0, 128;
+  --color-ace-transparent: rgba(var(--color-ace-rgb), 0.3);
+  --color-thrower: #8B4513; /* SaddleBrown */
+  --color-thrower-rgb: 139, 69, 19;
+  --color-thrower-transparent: rgba(var(--color-thrower-rgb), 0.3);
 }
 
 a {
