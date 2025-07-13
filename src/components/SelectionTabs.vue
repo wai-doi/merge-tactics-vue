@@ -7,7 +7,6 @@
 
     <div class="selection-list">
       <div v-if="activeTab === 'includeUnits'" class="tab-content-include-units">
-        <h4>ユニットを選択</h4>
         <div class="unit-selection-table-container">
           <table class="unit-selection-table">
             <thead>
@@ -49,7 +48,6 @@
       </div>
 
       <div v-if="activeTab === 'includeSkills'" class="tab-content-include-skills">
-        <h4>スキルを選択</h4>
         <div class="skill-selection-grid">
           <div v-for="role in orderedRoles" :key="role" class="skill-role-group" :class="[role]">
             <h5 :class="[role]">{{ translateRoleName(role) }}</h5>
@@ -215,12 +213,6 @@ function toggleSelection(name, category) {
 
 .selection-list {
   padding: 15px;
-}
-
-.selection-list h4 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  color: #333;
 }
 
 .unit-selection-table-container {
