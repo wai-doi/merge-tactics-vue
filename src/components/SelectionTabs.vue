@@ -1,8 +1,8 @@
 <template>
   <div class="selection-tabs-container">
     <div class="tabs">
-      <button :class="{ active: activeTab === 'includeUnits' }" @click="activeTab = 'includeUnits'">ユニット選択</button>
-      <button :class="{ active: activeTab === 'includeSkills' }" @click="activeTab = 'includeSkills'">スキル選択</button>
+      <div class="tab-item" :class="{ active: activeTab === 'includeUnits' }" @click="activeTab = 'includeUnits'">ユニット選択</div>
+      <div class="tab-item" :class="{ active: activeTab === 'includeSkills' }" @click="activeTab = 'includeSkills'">スキル選択</div>
     </div>
 
     <div class="selection-list">
@@ -189,7 +189,7 @@ function toggleSelection(name, category) {
   border-bottom: 1px solid #eee;
 }
 
-.tabs button {
+.tabs .tab-item {
   flex: 1;
   padding: 10px 15px;
   border: none;
@@ -201,11 +201,11 @@ function toggleSelection(name, category) {
   outline: none;
 }
 
-.tabs button:hover {
+.tabs .tab-item:hover {
   background-color: #e0e0e0;
 }
 
-.tabs button.active {
+.tabs .tab-item.active {
   background-color: #fff;
   color: #333;
   border-bottom: 2px solid #ccc;
